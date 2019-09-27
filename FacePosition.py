@@ -2,7 +2,6 @@
 # Defines class FacePositioning
 
 import cv2
-import numpy as np
 
 
 class FacePositioning():
@@ -21,11 +20,9 @@ class FacePositioning():
 
         # NOTE: The numbers inside parentheses () are minimum and maximum sizes for the
         # faces. You might want to change these depending on how far you want to be from
-        # the camera and how large you want for the distance of detection be.
-        # faces = self.face_cascade_.detectMultiScale( # This commented out section is for multiplayer
-        #     gray, 1.3, 5, 0, (50, 50), (100, 100))
-        faces = self.face_cascade_.detectMultiScale( # These sizes are for single player/testing
-            gray, 1.3, 5, 0, (100, 100), (500, 500))
+        # the camera and how large you want for the range of detection be.
+        faces = self.face_cascade_.detectMultiScale(
+            gray, 1.3, 5, 0, (30, 30), (300, 300))
 
         ret_faces = []
 

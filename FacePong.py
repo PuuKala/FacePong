@@ -53,7 +53,7 @@ def key_first_index(list):
     return list[0]
 
 
-# Game loop
+# Main "function" aka. the game
 if __name__ == "__main__":
     faces = FacePosition.FacePositioning()
 
@@ -78,10 +78,11 @@ if __name__ == "__main__":
     ball.dx = 2
     ball.dy = 2
 
-    # The paddles
+    # The paddles, paddle class defined above in this file
     l_paddle = Paddle(-350)
     r_paddle = Paddle(350)
 
+    # Game loop
     running = True
     while running:
         window.update()
@@ -93,7 +94,13 @@ if __name__ == "__main__":
                 calibration_2[0]*max(detected_faces, key=key_first_index)[1]+calibration_2[1])
 
         # Moving the ball
-        ball.setx(ball.xcor() + ball.dx)
+        if (ball.xcor()>-341 and (ball.xcor()+ball.dx<-350)):
+            ball.setx(-341)
+        elif (ball.xcor()<341 and (ball.xcor()+ball.dx>350)):
+            ball.setx(341)
+        else:
+            ball.setx(ball.xcor() + ball.dx)
+        
         ball.sety(ball.ycor() + ball.dy)
 
         # Border checking
@@ -107,17 +114,19 @@ if __name__ == "__main__":
 
         if ball.xcor() > 390:
             ball.goto(0, 0)
-            ball.dx *= -1
+            ball.dx = -2
+            ball.dy = 2
 
         if ball.xcor() < -390:
             ball.goto(0, 0)
-            ball.dx *= -1
+            ball.dx = 2
+            ball.dy = 2
 
         # Paddle and ball collisions
         if (ball.xcor() > 340 and ball.xcor() < 350) and (ball.ycor() < r_paddle.paddle_.ycor()+40 and ball.ycor() > r_paddle.paddle_.ycor()-50):
-            ball.dx *= -1.1
-            ball.dy *= 1.1
+            ball.dx *= -1.3
+            ball.dy *= 1.3
 
         if (ball.xcor() < -340 and ball.xcor() > -350) and (ball.ycor() < l_paddle.paddle_.ycor()+50 and ball.ycor() > l_paddle.paddle_.ycor()-50):
-            ball.dx *= -1.1
-            ball.dy *= 1.1
+            ball.dx *= -1.3
+            ball.dy *= 1.3
