@@ -3,10 +3,10 @@ Pong game controlled by face position
 
 ## Dependencies
 The game requires Python Turtle and OpenCV. You can install these through pip with commands:
-> pip install turtle
+> pip install turtles
 
 and
-> pip install opencv
+> pip install opencv-python
 
 **Most of the game side code taken from [this youtube video](https://www.youtube.com/watch?v=C6jJg9Zan7w).**
 
