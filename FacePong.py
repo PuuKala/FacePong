@@ -51,6 +51,15 @@ def calibrate(faces, left):
 def key_first_index(list):
     # Super simple function to be used as min function key
     return list[0]
+	
+class LowPassFilter:
+	prev_vals = []
+	
+	def filter_control(self, value):
+		self.prev_vals.append(value)
+		if len(self.prev_vals) > 10:
+			self.prev_vals.pop(0)
+		return sum(self.prev_vals)/len(self.prev_vals)
 
 
 # Main "function" aka. the game
@@ -81,17 +90,24 @@ if __name__ == "__main__":
     # The paddles, paddle class defined above in this file
     l_paddle = Paddle(-350)
     r_paddle = Paddle(350)
+	
+    lpf = LowPassFilter()
 
     # Game loop
     running = True
     while running:
         window.update()
+		
+		# Moving the paddles
         detected_faces = faces.getFaces()
         if detected_faces:
-            l_paddle.move(
-                calibration_1[0]*min(detected_faces, key=key_first_index)[1]+calibration_1[1])
-            r_paddle.move(
-                calibration_2[0]*max(detected_faces, key=key_first_index)[1]+calibration_2[1])
+            y = min(detected_faces, key=key_first_index)[1]
+            y = lpf.filter_control(y)
+            l_paddle.move(calibration_1[0]*y+calibration_1[1])
+
+            y = max(detected_faces, key=key_first_index)[1]
+            y = lpf.filter_control(y)
+            r_paddle.move(calibration_1[0]*y+calibration_1[1])
 
         # Moving the ball
         if (ball.xcor()>-341 and (ball.xcor()+ball.dx<-350)):
